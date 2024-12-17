@@ -1,0 +1,21 @@
+cd ../train/
+find ./OK -maxdepth 1 -name "*.png"  > list_OK.txt
+sed '1,3000!d' list_OK.txt > list_OK_short.txt
+montage -geometry 32x32+1+1 -tile 100x @list_OK_short.txt montage_OK.png
+find ./nOK -maxdepth 1 -name "*.png"  > list_nOK.txt
+montage -geometry 32x32+1+1 -tile 100x @list_nOK.txt montage_nOK.png
+
+cd ../test/
+find ./OK -maxdepth 1 -name "*.png"  > list_OK.txt
+sed '1,3000!d' list_OK.txt > list_OK_short.txt
+montage -geometry 32x32+1+1 -tile 100x @list_OK_short.txt montage_OK.png
+find ./nOK -maxdepth 1 -name "*.png"  > list_nOK.txt
+montage -geometry 32x32+1+1 -tile 100x @list_nOK.txt montage_nOK.png
+
+cd ../val/
+find ./OK -maxdepth 1 -name "*.png"  > list_OK.txt
+sed '1,3000!d' list_OK.txt > list_OK_short.txt
+montage -geometry 32x32+1+1 -tile 100x @list_OK_short.txt montage_OK.png
+find ./nOK -maxdepth 1 -name "*.png"  > list_nOK.txt
+montage -geometry 32x32+1+1 -tile 100x @list_nOK.txt montage_nOK.png
+

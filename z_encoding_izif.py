@@ -76,10 +76,10 @@ Z_REG_TYPE = 'tanh_fc' # DEFAULT (paper version)
 ##Z_REG_TYPE = '3s_hard_clip'
 ##Z_REG_TYPE = '05s_hard_clip'
 
-print bcolors.GREEN + "\n=== ENCODER TRAINING PARAMETERS ===" + bcolors.ENDC
+print(bcolors.GREEN + "\n=== ENCODER TRAINING PARAMETERS ===" + bcolors.ENDC)
 lib.print_model_settings(locals().copy())
 
-DEVICES = ['/gpu:{}'.format(i) for i in xrange(N_GPUS)]
+DEVICES = ['/gpu:{}'.format(i) for i in range(N_GPUS)]
 
 timestamp = time.strftime("%Y-%m-%d-%H%M")
 
@@ -191,7 +191,7 @@ def Encoder(inputs, is_training, dim=DIM, z_dim=ZDIM, rand_sampling='normal', re
         elif rand_sampling == 'normal':
             condition = tf.greater(tf.abs(output), 3.)
             true_case = tf.random_normal(output.get_shape())
-            print bcolors.YELLOW + "\nImplementing STOCH-CLIP with NORMAL z-mapping!\n" + bcolors.ENDC
+            print(bcolors.YELLOW + "\nImplementing STOCH-CLIP with NORMAL z-mapping!\n" + bcolors.ENDC)
         return tf.where(condition, true_case, output)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -246,7 +246,7 @@ def train_enc_izi(checkpoint_dir, checkpoint_iter, nr_valid_plt=9, nr_valid_btch
         all_real_data_conv = tf.placeholder(tf.int32, shape=[BATCH_SIZE, 1, 64, 64])
         if tf.__version__.startswith('1.'):
             split_real_data_conv = tf.split(all_real_data_conv, len(DEVICES))
-            print "\n\nDEVICES: %s\n\n" %DEVICES
+            print("\n\nDEVICES: %s\n\n" %DEVICES)
         else:
             split_real_data_conv = tf.split(0, len(DEVICES), all_real_data_conv)
         mapping_losses = []
@@ -315,7 +315,7 @@ def train_enc_izi(checkpoint_dir, checkpoint_iter, nr_valid_plt=9, nr_valid_btch
         saver_restore.restore(session, ckpt_pth)
 
         gen = inf_train_gen()
-        for iteration in tqdm(xrange(ITERS_ENC)):
+        for iteration in tqdm(range(ITERS_ENC)):
             start_time = time.time()
             _data = gen.next()
 

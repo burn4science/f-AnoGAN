@@ -1,0 +1,66 @@
+version: "3.9"
+
+name: f-anogan
+
+services:
+    dev_tf_121:
+        build:
+            target: dev_tf_121
+
+        profiles:
+            - tf121
+
+        tty: true       #keep container running! = docker run -t
+        init: true
+        restart: unless-stopped
+
+        image: f-anogan:tf_1.2.1
+
+        volumes:
+            - type: bind
+              source: ~/DEV/f-AnoGAN
+              target: /app
+
+        deploy:
+            resources:
+                reservations:
+                    cpus: '10'
+                    memory: 50G
+                    devices:
+                        -   driver: nvidia
+                            count: 1
+                            capabilities: [gpu]
+                limits:
+                    cpus: '15'
+                    memory: 100G
+
+    dev_tf_2130:
+        build:
+            target: dev_tf_2130
+
+        profiles:
+            - tf2130
+
+        tty: true       #keep container running! = docker run -t
+        init: true
+        restart: unless-stopped
+
+        image: f-anogan:tf_2.13.0
+
+        volumes:
+            - type: bind
+              source: ~/DEV/f-AnoGAN
+              target: /app
+
+        deploy:
+            resources:
+                reservations:
+                    cpus: '10'
+                    memory: 50G
+                    devices:
+                        -   driver: nvidia
+                            count: 1
+                            capabilities: [gpu]
+                limits:
+                    cpus: '15'
+                    memory: 100G

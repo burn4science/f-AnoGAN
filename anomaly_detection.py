@@ -64,10 +64,10 @@ OUTPUT_DIM = 64*64*1 # Number of pixels in each image
 N_GPUS = 1
 
 
-print bcolors.GREEN + "\n=== ANOMALY SCORING PARAMETERS ===" + bcolors.ENDC
+print(bcolors.GREEN + "\n=== ANOMALY SCORING PARAMETERS ===" + bcolors.ENDC)
 lib.print_model_settings(locals().copy())
 
-DEVICES = ['/gpu:{}'.format(i) for i in xrange(N_GPUS)]
+DEVICES = ['/gpu:{}'.format(i) for i in range(N_GPUS)]
 
 
 ## -- my loss functions
@@ -142,7 +142,7 @@ def Encoder(inputs, is_training, dim=DIM, z_dim=ZDIM, rand_sampling='normal', re
         elif rand_sampling == 'normal':
             condition = tf.greater(tf.abs(output), 3.)
             true_case = tf.random_normal(output.get_shape())
-            print bcolors.YELLOW + "\nImplementing STOCH-CLIP with NORMAL z-mapping!\n" + bcolors.ENDC
+            print(bcolors.YELLOW + "\nImplementing STOCH-CLIP with NORMAL z-mapping!\n" + bcolors.ENDC)
         return tf.where(condition, true_case, output)
 # - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - 
 
@@ -183,10 +183,10 @@ def anomaly_scoring(checkpoint_dir, checkpoint_iter, dual_iloss=True):
         z_reg_type = 'stoch_clip'
     else:
         z_reg_type = None
-    print bcolors.YELLOW + "\nUSING z_reg_type='%s'!\n" %z_reg_type + bcolors.ENDC
+    print(bcolors.YELLOW + "\nUSING z_reg_type='%s'!\n" %z_reg_type + bcolors.ENDC)
 
     
-    print bcolors.GREEN + "\nmapping_via_encoder:: checkpoint_dir: %s\ncheckpoint_iter: %d\n"%(checkpoint_dir, checkpoint_iter) + bcolors.ENDC
+    print(bcolors.GREEN + "\nmapping_via_encoder:: checkpoint_dir: %s\ncheckpoint_iter: %d\n"%(checkpoint_dir, checkpoint_iter) + bcolors.ENDC)
     model_type_name = checkpoint_dir.replace('z_encoding_d/','').replace('/checkpoints','') + suff_txt
     mapping_path = os.path.join('mappings', model_type_name)
 
@@ -244,16 +244,16 @@ def anomaly_scoring(checkpoint_dir, checkpoint_iter, dual_iloss=True):
 
         for is_anom,_gen in enumerate([test_gen(), ano_gen()]):
             nr_mapping_batches = nr_mapping_imgs[is_anom] // BATCH_SIZE
-            for _idx in xrange(nr_mapping_batches):
+            for _idx in range(nr_mapping_batches):
                 (_data,) = _gen.next()
                 _img_dist, _dist_z, _z = session.run([img_distance, z_distance, emb_query ],
                                                   feed_dict={ real_data: _data })
 
                 if np.mod(_idx+1,100)==0:
-                    print "%d (of %d) imgs processed ..\timg_m=%.4f\tz_m=%.4f" %( (_idx+1)*BATCH_SIZE,
+                    print("%d (of %d) imgs processed ..\timg_m=%.4f\tz_m=%.4f" %( (_idx+1)*BATCH_SIZE,
                                                                         nr_mapping_batches*BATCH_SIZE,
                                                                         _img_dist.mean(),
-                                                                        _dist_z.mean() )
+                                                                        _dist_z.mean() ))
 
                 with open( log_meta_path, "a" ) as f:
                     writer = csv.writer(f, delimiter=',')
@@ -266,7 +266,7 @@ def anomaly_scoring(checkpoint_dir, checkpoint_iter, dual_iloss=True):
                 z_dists.append( _dist_z )
 
         took_tm = time.time() - start_time
-        print "\nDONE!\t(mapping took %.1f seconds.)\n" %took_tm
+        print("\nDONE!\t(mapping took %.1f seconds.)\n" %took_tm)
 
         ## --- SAVE RESULTS ---
         with open( log_meta_path.replace('.csv', '.pkl'), 'w') as f:
@@ -275,7 +275,7 @@ def anomaly_scoring(checkpoint_dir, checkpoint_iter, dual_iloss=True):
                         'img_dists': img_dists,
                         'z_dists': z_dists,
             }, f, cPickle.HIGHEST_PROTOCOL)
-        print "Done!\n"
+        print("Done!\n")
 
 
 
